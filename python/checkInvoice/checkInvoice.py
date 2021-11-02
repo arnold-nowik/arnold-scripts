@@ -14,7 +14,7 @@ def convert_df_to_dict(df, temp_file):
 # output data in CSV format
     df_csv = df.to_csv(index=False, header=False)
     with open(temp_file, 'w') as f:
-        print(df_csv.upper(), file=f, end="")
+        print(df_csv.upper().strip(), file=f, end="")
 # Convert CSV to a dictionary
     reader = csv.reader(open(temp_file))
     dictionary = {}
@@ -122,8 +122,9 @@ for key in invoice_dict.keys():
     cmp_inv = invoice_dict[key]
     try:
         cmp_sms = sms_dict[key]
-    except KeyError:
+    except (KeyError, NameError):
         print(f" - ERROR - {key.upper()}はSMSデータには見つかりませんでした。")
+        continue
     if cmp_inv == cmp_sms:
         print(f" - {key.upper()} - OK. 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}.")
     else:
@@ -167,7 +168,7 @@ if args.timesheet:
             name_cell = sheet[input_name_cell]
             worktime_cell = sheet[input_worktime_cell]
             print(f"{name_cell.value} = {worktime_cell.value}")
-            timesheet_dict[str(name_cell.value).upper()] = float(str(worktime_cell.value))
+            timesheet_dict[str(name_cell.value).upper().strip()] = float(str(worktime_cell.value))
     except ValueError:
         pass
     print("\n稼働時間チェック\n＝＝＝＝＝＝＝＝")
