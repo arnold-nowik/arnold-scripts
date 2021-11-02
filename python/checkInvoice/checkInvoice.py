@@ -123,12 +123,12 @@ for key in invoice_dict.keys():
     try:
         cmp_sms = sms_dict[key]
     except (KeyError, NameError):
-        print(f" - ERROR - {key.upper()}はSMSデータには見つかりませんでした。")
+        print(f" ! ERROR - {key.upper()}はSMSデータには見つかりませんでした。")
         continue
     if cmp_inv == cmp_sms:
         print(f" - {key.upper()} - OK. 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}.")
     else:
-        print(f" - {key.upper()} - NG. 稼働率または単価が異なっています.\n   >> 請求書　: 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}\n   >> システム: 稼働率 {sms_dict[key][0]}, 単価 {sms_dict[key][1]}.\n")
+        print(f" ! {key.upper()} - NG. 稼働率または単価が異なっています.\n   >> 請求書　: 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}\n   >> システム: 稼働率 {sms_dict[key][0]}, 単価 {sms_dict[key][1]}.\n")
 
 
 ### Check Worktime Data ###
@@ -175,15 +175,19 @@ if args.timesheet:
 
 # Compare Invoice worktime data with Timesheet data
     for key in invoice_wt_dict.keys():
-        if invoice_dict[key][0] < 1.0 and invoice_wt_dict[key] >= 120.0:
-            print(f" - WARNING - {key.upper()}の稼働率に対する稼働時間が誤っている可能性があります!\n   >> 稼働率　: {invoice_dict[key][0]}\n   >> 稼働時間: {invoice_wt_dict[key]}\n")
         cmp_inv_wt = invoice_wt_dict[key]
         try:
             cmp_timesheet = timesheet_dict[key]
         except (KeyError, NameError):
-            print(f" - ERROR - {key.upper()}はタイムシートには見つかりませんでした。")
+            print(f" ! ERROR - {key.upper()}はタイムシートには見つかりませんでした。")
             continue
         if cmp_inv_wt == cmp_timesheet:
             print(f" - {key.upper()} - OK. 稼働時間が一致しています: {cmp_inv_wt}.")
         else:
-            print(f" - {key.upper()} - NG. 稼働時間が異なっています.\n   >> 請求書:  {cmp_inv_wt}\n   >> Timesheet: {cmp_timesheet}\n")
+            print(f" ! {key.upper()} - NG. 稼働時間が異なっています.\n   >> 請求書:  {cmp_inv_wt}\n   >> Timesheet: {cmp_timesheet}\n")
+        if invoice_dict[key][0] < 1.0 and invoice_wt_dict[key] >= 120.0:
+            print(f" ! WARNING - {key.upper()}の稼働率に対する稼働時間が誤っている可能性があります!\n   >> 稼働率　: {invoice_dict[key][0]}\n   >> 稼働時間: {invoice_wt_dict[key]}")
+        if invoice_dict[key][0] == 1.0 and invoice_wt_dict[key] < 140.0:
+            print(f" ! WARNING - {key.upper()}の稼働時間は140時間以下になっています: {invoice_wt_dict[key]}")
+        if invoice_dict[key][0] == 1.0 and invoice_wt_dict[key] > 180.0:
+            print(f" ! WARNING - {key.upper()}の稼働時間は180時間以上になっています: {invoice_wt_dict[key]}")
