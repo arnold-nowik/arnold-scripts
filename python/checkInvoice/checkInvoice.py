@@ -167,7 +167,7 @@ if args.timesheet:
             name_cell = sheet[input_name_cell]
             worktime_cell = sheet[input_worktime_cell]
             print(f"{name_cell.value} = {worktime_cell.value}")
-            timesheet_dict[str(name_cell.value)] = float(str(worktime_cell.value))
+            timesheet_dict[str(name_cell.value).upper()] = float(str(worktime_cell.value))
     except ValueError:
         pass
     print("\n稼働時間チェック\n＝＝＝＝＝＝＝＝")
@@ -177,8 +177,9 @@ if args.timesheet:
         cmp_inv_wt = invoice_wt_dict[key]
         try:
             cmp_timesheet = timesheet_dict[key]
-        except KeyError:
+        except (KeyError, NameError):
             print(f" - ERROR - {key.upper()}はタイムシートには見つかりませんでした。")
+            continue
         if cmp_inv_wt == cmp_timesheet:
             print(f" - {key.upper()} - OK. 稼働時間が一致しています: {cmp_inv_wt}.")
         else:
