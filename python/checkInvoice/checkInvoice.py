@@ -125,9 +125,9 @@ for key in invoice_dict.keys():
     except KeyError:
         print(f" - ERROR - {key.upper()}はSMSデータには見つかりませんでした。")
     if cmp_inv == cmp_sms:
-        print(f" - {key.upper()} - OK. 稼働率も単価も一致しています: {cmp_inv}.")
+        print(f" - {key.upper()} - OK. 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}.")
     else:
-        print(f" - {key.upper()} - NG. 稼働率または単価が異なっています.\n>> Invoice: {cmp_inv}\n>> SMS:     {cmp_sms}.\n")
+        print(f" - {key.upper()} - NG. 稼働率または単価が異なっています.\n   >> 請求書　: 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}\n   >> システム: 稼働率 {sms_dict[key][0]}, 単価 {sms_dict[key][1]}.\n")
 
 
 ### Check Worktime Data ###
@@ -174,6 +174,8 @@ if args.timesheet:
 
 # Compare Invoice worktime data with Timesheet data
     for key in invoice_wt_dict.keys():
+        if invoice_dict[key][0] < 1.0 and invoice_wt_dict[key] >= 120.0:
+            print(f" - WARNING - {key.upper()}の稼働率に対する稼働時間が誤っている可能性があります!\n   >> 稼働率　: {invoice_dict[key][0]}\n   >> 稼働時間: {invoice_wt_dict[key]}\n")
         cmp_inv_wt = invoice_wt_dict[key]
         try:
             cmp_timesheet = timesheet_dict[key]
@@ -183,4 +185,4 @@ if args.timesheet:
         if cmp_inv_wt == cmp_timesheet:
             print(f" - {key.upper()} - OK. 稼働時間が一致しています: {cmp_inv_wt}.")
         else:
-            print(f" - {key.upper()} - NG. 稼働時間が異なっています.\n>> Invoice:  {cmp_inv_wt}\n>> Timesheet: {cmp_timesheet}.\n")
+            print(f" - {key.upper()} - NG. 稼働時間が異なっています.\n   >> 請求書:  {cmp_inv_wt}\n   >> Timesheet: {cmp_timesheet}\n")
