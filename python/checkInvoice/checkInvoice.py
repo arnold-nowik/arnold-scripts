@@ -187,7 +187,9 @@ if args.timesheet:
             print(f" ! {key.upper()} - NG. 稼働時間が異なっています.\n   >> 請求書:  {cmp_inv_wt}\n   >> Timesheet: {cmp_timesheet}\n")
         if invoice_dict[key][0] < 1.0 and invoice_wt_dict[key] >= 120.0:
             print(f" ! WARNING - {key.upper()}の稼働率に対する稼働時間が誤っている可能性があります!\n   >> 稼働率　: {invoice_dict[key][0]}\n   >> 稼働時間: {invoice_wt_dict[key]}")
-        if invoice_dict[key][0] == 1.0 and invoice_wt_dict[key] < 140.0:
-            print(f" ! WARNING - {key.upper()}の稼働時間は140時間以下になっています: {invoice_wt_dict[key]}")
-        if invoice_dict[key][0] == 1.0 and invoice_wt_dict[key] > 180.0:
-            print(f" ! WARNING - {key.upper()}の稼働時間は180時間以上になっています: {invoice_wt_dict[key]}")
+        if invoice_dict[key][0] == 1.0 and invoice_wt_dict[key] < 140.0 or invoice_wt_dict[key] > 180.0:
+            print(f" ! WARNING - {key.upper()}の稼働時間は所定範囲外です: {invoice_wt_dict[key]}")
+        if invoice_dict[key][0] == 0.5 and invoice_wt_dict[key] > 90.0 or invoice_wt_dict[key] < 70.0:
+            print(f" ! WARNING - {key.upper()}の稼働時間は所定範囲外です: {invoice_wt_dict[key]}")
+        if invoice_dict[key][0] == 0.25 and invoice_wt_dict[key] > 45.0 or invoice_wt_dict[key] < 35.0:
+            print(f" ! WARNING - {key.upper()}の稼働時間は所定範囲外です: {invoice_wt_dict[key]}")
