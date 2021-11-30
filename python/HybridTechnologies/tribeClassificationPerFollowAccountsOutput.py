@@ -21,5 +21,5 @@ tribeDf = pandas.read_excel(args.tribes, sheet_name=None)
 followersDf = pandas.read_excel(args.follower_list)
 merge = {}
 for df in range(1,tribeno):
-    merge[f"{df}"] = pandas.merge(tribeDf[f"{df}"],followersDf,how="left", on="ID")
+    merge[f"{df}"] = pandas.merge(tribeDf[f"{df}"],followersDf,how="left", on="サンプルアカウント")
     pandas.DataFrame.from_dict(merge[f"{df}"]).to_excel(f"Tribe{df}.xlsx", index=False)
