@@ -39,7 +39,7 @@ smsDataFrame = pandas.read_excel(args.sms_project_xlsx, usecols=[2,5,8])
 smsDataFrame['Workload (%)'] = smsDataFrame['Workload (%)'] / 100
 
 # Create dictionary
-sms_dict = convert_df_to_dict(smsDataFrame, './sms.csv') 
+sms_dict = convert_df_to_dict(smsDataFrame, './sms.csv')
 
 # Cleanup temp file
 remove('./sms.csv')
@@ -112,11 +112,10 @@ for key in invoice_dict.keys():
 
 headcount = 0
 for key in invoice_dict.keys():
-    print(key.upper())
     headcount += 1
 
 print(f"\n稼働率と単価チェック\n＝＝＝＝＝＝＝＝＝＝\n請求書の頭数：{headcount}名")
-print(f"合計稼働率　：{invoice_workload}人月\n")
+print(f"合計稼働率　：{invoice_workload}人月")
 
 for key in invoice_dict.keys():
     cmp_inv = invoice_dict[key]
@@ -126,9 +125,9 @@ for key in invoice_dict.keys():
         print(f" ! ERROR - {key.upper()}はSMSデータには見つかりませんでした。")
         continue
     if cmp_inv == cmp_sms:
-        print(f" - {key.upper()} - OK. 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}.")
+        print(f" - {key.upper()} - OK. 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}")
     else:
-        print(f" ! {key.upper()} - NG. 稼働率または単価が異なっています.\n   >> 請求書　: 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}\n   >> システム: 稼働率 {sms_dict[key][0]}, 単価 {sms_dict[key][1]}.\n")
+        print(f" ! {key.upper()} - NG. 稼働率または単価が異なっています.\n   >> 請求書　: 稼働率 {invoice_dict[key][0]}, 単価 {invoice_dict[key][1]}\n   >> システム: 稼働率 {sms_dict[key][0]}, 単価 {sms_dict[key][1]}")
 
 
 ### Check Worktime Data ###
