@@ -19,7 +19,10 @@ except (TypeError, ValueError) as err:
 
 tribeDf = pandas.read_excel(args.tribes, sheet_name=None)
 followersDf = pandas.read_excel(args.follower_list)
+writer = pandas.ExcelWriter("./finalOutput.xlsx")
 merge = {}
 for df in range(1,tribeno):
     merge[f"{df}"] = pandas.merge(tribeDf[f"{df}"],followersDf,how="left", on="サンプルアカウント")
-    pandas.DataFrame.from_dict(merge[f"{df}"]).to_excel(f"Tribe{df}.xlsx", index=False)
+    for key in merge:
+        merge[key].to_excel(writer, key, index=False)
+writer.save()
