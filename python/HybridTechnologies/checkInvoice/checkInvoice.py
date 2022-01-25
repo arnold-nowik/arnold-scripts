@@ -31,9 +31,10 @@ parser.add_argument("sms_project_xlsx", help="Project Excel file from Sales Mana
 parser.add_argument("-t", "--timesheet", help="Timesheet Excel file")
 args = parser.parse_args()
 
-### Read SMS data ###
+### Read SMS data and strip leading and trailing spaces###
 
 smsDataFrame = pandas.read_excel(args.sms_project_xlsx, usecols=[2,5,8])
+smsDataFrame['Full Name'] = smsDataFrame['Full Name'].str.strip()
 
 # Output Workload value as a float instead of percent, the same as on invoices
 smsDataFrame['Workload (%)'] = smsDataFrame['Workload (%)'] / 100
@@ -71,6 +72,7 @@ cols = inv_name + ', ' + inv_wload + ', ' + inv_bill
 
 try:
     invoiceDataFrame = pandas.read_excel(args.invoice_xlsx, sheet_name=wb, header=None, usecols=cols, skiprows=skip_rows, nrows=nrows).iloc[::2] # make sure to read only every 2nd row by specifying iloc[::2]
+    invoiceDataFrame[2] = invoiceDataFrame[2].str.strip() # strip leading and trailing spaces
 except ValueError as err:
     print(f"\nError - {err}\n")
     sys.exit(1)
